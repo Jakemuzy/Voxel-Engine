@@ -6,9 +6,9 @@
  jmuzyka4@Ggmail.com
 
 # Building
-1.) Ensure you have cmake downloaded
-2.) Make your way into Voxel-Engine directory
-3.) cmake -S . -B builds
-4.) ./builds/Debug/Voxel-Engine.exe
+1.) Ensure you have cmake downloaded  
+2.) Make your way into Voxel-Engine directory  
+3.) cmake -S . -B builds  
+4.) ./builds/Debug/Voxel-Engine.exe  
 
 # Known Issues
