@@ -5,7 +5,7 @@ in vec3 Normal;
 in vec3 TexCoords;
 
 vec3 lightDir = vec3(-0.5, -0.5, -0.5);
-uniform sampler3D myTexture;
+uniform sampler2DArray myTexture;
 
 void main()
 {

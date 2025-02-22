@@ -223,10 +223,10 @@ private:
 
             float maxHeight = fabs(noise.GetNoise((float)(x + xOffset), (float)(z + zOffset))) * height; // No idea why these values are negative
 
-            //heightMap[i] = static_cast<int>(maxHeight);
-            //totalBlocks += static_cast<int>(maxHeight);
-            heightMap[i] = 128;
-            totalBlocks += (int)128;
+            heightMap[i] = static_cast<int>(maxHeight);
+            totalBlocks += static_cast<int>(maxHeight);
+            //heightMap[i] = 128;
+            //totalBlocks += (int)128;
         }
     }
 
@@ -371,7 +371,7 @@ public:
 
         auto start = std::chrono::high_resolution_clock::now();
 
-        int trialCount = 10;
+        int trialCount = 1;
         int maxThreads = std::thread::hardware_concurrency() / 3; // Limit active threads
 
         chunks.reserve(chunksX * chunksZ);

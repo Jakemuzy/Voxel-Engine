@@ -293,9 +293,9 @@ int main(void){
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     //World
-    World newWorld(5, 5);
+    World newWorld(10, 10);
 
-    Shader blockShader("dependencies/shaders/block.vert", "dependencies/shaders/test.frag");
+    Shader blockShader("dependencies/shaders/block.vert", "dependencies/shaders/block.frag");
     //unsigned int grass = generateBlockTexture("grass");
     unsigned int grass = loadAllTextures();
     //unsigned int dirt = generateBlockTexture("dirt");

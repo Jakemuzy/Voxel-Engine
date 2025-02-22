@@ -7,8 +7,8 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Minecraft",
-            "runtimeExecutable": "${workspaceFolder}\\builds\\Debug\\minecraft.exe"
+            "name": "Voxel-Engine",
+            "runtimeExecutable": "${workspaceFolder}\\builds\\Debug\\Voxel-Engine.exe"
 
         }
     ]
