@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\jmuzy\Downloads\Minecraft\builds\CMakeFiles\0384a8161233a727eed6edf4727c4ebc\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{D443F422-6552-3DA0-B006-31A89194A6FC}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

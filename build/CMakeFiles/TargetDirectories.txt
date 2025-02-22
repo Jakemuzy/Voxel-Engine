@@ -1,0 +1,3 @@
+C:/Users/jmuzy/Downloads/Minecraft/build/CMakeFiles/minecraft.dir
+C:/Users/jmuzy/Downloads/Minecraft/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/jmuzy/Downloads/Minecraft/build/CMakeFiles/ZERO_CHECK.dir
