@@ -293,7 +293,7 @@ int main(void){
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     //World
-    World newWorld(10, 10);
+    World newWorld(16, 16);
 
     Shader blockShader("dependencies/shaders/block.vert", "dependencies/shaders/block.frag");
     //unsigned int grass = generateBlockTexture("grass");

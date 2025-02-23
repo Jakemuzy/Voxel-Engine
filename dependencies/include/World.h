@@ -207,6 +207,7 @@ public:
 class Chunk {
 private:
     const static int width = 32, length = 32, height = 128;
+    const static int waterLevel = 4;
     unsigned int chunkVAO, textureID;
     int totalBlocks = 0;
 
@@ -223,6 +224,8 @@ private:
 
             float maxHeight = fabs(noise.GetNoise((float)(x + xOffset), (float)(z + zOffset))) * height; // No idea why these values are negative
 
+            if(maxHeight <= 4)
+                maxHeight = 4;
             heightMap[i] = static_cast<int>(maxHeight);
             totalBlocks += static_cast<int>(maxHeight);
             //heightMap[i] = 128;
@@ -263,6 +266,9 @@ public:
                     blockType = 1;  //Grass
                 else if (y <= maxY - 7)
                     blockType = 3;  //Stone
+
+                if (maxY <= 4)
+                    blockType = 4;
 
                 // Bitwise occlusion flags
                 std::uint8_t occlusion = 0;                                                                    // 0, 5, 1, 4, 2, 3, because that's the order the face data is stored in the position, normal and texture vectors
