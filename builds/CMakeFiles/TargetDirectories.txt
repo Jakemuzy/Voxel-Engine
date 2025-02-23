@@ -1,3 +1,0 @@
-C:/Users/jmuzy/Downloads/Voxel-Engine/builds/CMakeFiles/Voxel-Engine.dir
-C:/Users/jmuzy/Downloads/Voxel-Engine/builds/CMakeFiles/ALL_BUILD.dir
-C:/Users/jmuzy/Downloads/Voxel-Engine/builds/CMakeFiles/ZERO_CHECK.dir
