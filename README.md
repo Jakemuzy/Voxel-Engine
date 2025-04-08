@@ -7,10 +7,13 @@
 
 # Building
 1.) Ensure you have cmake downloaded  
-2.) Make your way into Voxel-Engine directory  
+2.) Make your way into Voxel-Engine-main directory  
 3.) open command line and type  
     cmake -S . -B builds  
-4.) type  
-    start builds/Debug/Voxel-Engine.exe  
+4.) cmake --build builds  
+5.) type  
+    start builds/Debug/Voxel-Engine-main.exe  
+    or 
+    ./builds/Debug/Voxel-Engine-main.exe
 
 # Known Issues

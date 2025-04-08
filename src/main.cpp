@@ -1,31 +1,43 @@
 #define STB_IMAGE_IMPLEMENTATION
 
+// imgui
+
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
+
+// std
 #include <iostream>
 #include <vector>
 #include <filesystem>
 
+// glad 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+// math
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+// etc help
 #include <stb_image.h>
 #include <Shader.h>
 #include <Camera.h>
 
 #include <World.h>
+#include <Player.h>
 
 namespace fs = std::filesystem;
 
 // Global Variables
-Camera camera(glm::vec3(0.0f, 0.0f, -3.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f);
+Camera camera(glm::vec3(0.0f, 0.0f, 68.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f);
 bool firstMouse = true, disableMouseMovement = false;
 float deltaTime = 0.0f; // Time between current frame and last frame
 float lastFrame = 0.0f; // Time of last frame
 float lastX = 400, lastY = 300;
 float timeSinceLastCursorFocus = 0;
+ImGuiIO *ioptr;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
@@ -79,6 +91,24 @@ void processInput(GLFWwindow* window)
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
         camera.ProcessKeyboard(DOWN, deltaTime);
 
+    if (glfwGetKey(window, GLFW_KEY_9) == GLFW_PRESS && timeSinceLastCursorFocus >= 0.4f)
+    {
+        if (glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_NORMAL)
+        {
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+            disableMouseMovement = false;
+            firstMouse = true;
+        }
+        else if (glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_DISABLED)
+        {
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
+            disableMouseMovement = true;
+        }
+
+        timeSinceLastCursorFocus = 0;
+    }
+    timeSinceLastCursorFocus += deltaTime;
 }
 
 unsigned int loadTex3D(std::string paths[6])
@@ -256,6 +286,7 @@ int main(void){
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_SAMPLES, 64);
     //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
     int windowWidth = 1200, windowHeight = 800;
@@ -285,6 +316,7 @@ int main(void){
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     // Render Settings
+    glEnable(GL_MULTISAMPLE);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glEnable(GL_TEXTURE_3D);
@@ -304,7 +336,23 @@ int main(void){
     //Matrix
     glm::mat4 view = glm::mat4(1.0f);
     glm::mat4 model = glm::mat4(1.0f);
-    glm::mat4 projection = projection = glm::perspective(glm::radians(45.0f), (float)windowWidth / (float)windowHeight, 0.1f, 1000.0f);
+    glm::mat4 projection = projection = glm::perspective(glm::radians(45.0f), (float)windowWidth / (float)windowHeight, 0.1f, 800.0f);
+
+    // Imgui initializiation
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+
+    ImGuiIO &io = ImGui::GetIO();
+    (void)io;
+    ioptr = &io;
+    ImGui::StyleColorsDark();
+
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 330 core");
+
+    double previousTime = glfwGetTime();
+    int frameCount = 0, currentFPS = 0;
+    float playerPos[3] = {0,0,0};
 
     // Main Loop
     while (!glfwWindowShouldClose(window))
@@ -313,9 +361,25 @@ int main(void){
         deltaTime = glfwGetTime() - lastFrame;
         lastFrame = glfwGetTime();
 
+        // FPS COUNTER
+        double currentTime = glfwGetTime();
+        frameCount++;
+
+        if (currentTime - previousTime >=  1.0f)
+        {
+            currentFPS = frameCount;
+            frameCount = 0;
+            previousTime = currentTime;
+        }
+
         // Buffers
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        // ImGui
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
 
         // Inputs
         processInput(window);
@@ -327,12 +391,24 @@ int main(void){
         blockShader.setMat4("view", view);
         blockShader.setMat4("projection", projection);
         
-        newWorld.draw();
-        
+        newWorld.draw(view, projection);
+
+        ImGui::Begin("Debug Menu");
+        std::string fpsString = "FPS: " + std::to_string(currentFPS);
+        ImGui::Text(fpsString.c_str());
+        playerPos[0] = camera.Position.x; playerPos[1] = camera.Position.y; playerPos[2] = camera.Position.z;
+        ImGui::SliderFloat3("Position ", playerPos, -999, 999);
+        ImGui::End();
+
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
     glfwTerminate();
     return 0;
 }  
